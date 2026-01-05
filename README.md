@@ -4,6 +4,12 @@
 
 A fast, opinionated project launcher for developers. Manage all your projects in one place with quick access to IDEs, terminals, and common tasks.
 
+<div align="center">
+  <img src="pic1.png" alt="DevLaunch Screenshot 1" width="800" />
+  <br/><br/>
+  <img src="pic2.png" alt="DevLaunch Screenshot 2" width="800" />
+</div>
+
 ## Features
 
 - 🚀 Quick project launching in your favorite IDE (VS Code, Cursor, WebStorm, Xcode, etc.)
