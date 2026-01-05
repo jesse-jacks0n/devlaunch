@@ -1,0 +1,183 @@
+Project Description
+
+This project is the design and development of a desktop-first developer project portal—a fast, opinionated control layer that sits before the IDE.
+
+The app exists to solve a common but under-addressed developer problem: IDE friction and context overload. Modern IDEs are powerful but heavy. Opening them just to locate, clean, or prepare a project is inefficient, disruptive, and mentally expensive. This tool removes that friction by giving developers a dedicated space to manage, prepare, and launch projects intentionally.
+
+Instead of treating projects as folders buried in the filesystem, the app treats them as first-class entities—organized, inspectable, and actionable.
+
+What the App Is
+
+The app is a local, offline, high-performance project launcher and management surface for programmers.
+
+It provides:
+
+A persistent library of development projects
+
+Fast project discovery without opening an IDE
+
+Intelligent detection of project type and tooling
+
+Explicit, one-click actions to prepare and launch projects in the correct environment
+
+It behaves more like a Steam library for code projects than a traditional file explorer or IDE plugin.
+
+What the App Is Not
+
+To be explicit, this app is not:
+
+An IDE
+
+A code editor
+
+A terminal emulator
+
+A cloud service
+
+A task runner or CI tool
+
+A beginner learning platform
+
+It does not attempt to replace existing developer tools.
+It orchestrates them.
+
+Core Problem Being Solved
+
+Developers routinely face the following inefficiencies:
+
+Opening an IDE just to find a project
+
+IDEs auto-indexing massive repositories unnecessarily
+
+Old or bloated node_modules folders slowing machines down
+
+Repeating setup rituals across multiple projects
+
+Losing mental context while switching between codebases
+
+These problems compound daily. The cost is not just time—it’s cognitive load.
+
+This app reduces that load by allowing developers to:
+
+Decide what they want to work on before opening an IDE
+
+Perform housekeeping tasks outside the IDE
+
+Launch projects cleanly and intentionally
+
+Core Concept
+
+The central concept is intentional project entry.
+
+A developer should be able to:
+
+Open the app
+
+See all active projects instantly
+
+Understand the state of a project at a glance
+
+Take deliberate actions
+
+Launch the IDE only when ready
+
+No background magic. No hidden automation.
+Everything is explicit, visible, and reversible.
+
+Key Capabilities
+Project Library
+
+Projects are added via folder selection or drag-and-drop
+
+Each project is persisted locally
+
+Projects are displayed as cards or list items with rich metadata
+
+Intelligent Detection
+
+Automatically detects:
+
+Node.js projects
+
+Package managers (npm, pnpm, yarn)
+
+Git repositories
+
+Detection is lightweight and non-recursive
+
+Project Actions
+
+Each project exposes clear, intentional actions:
+
+Open project in the configured IDE
+
+Install dependencies using the detected package manager
+
+Delete node_modules safely
+
+Reveal project in the system file explorer
+
+Feedback & Transparency
+
+All operations show clear feedback
+
+Logs are readable and honest
+
+Errors are surfaced directly, without abstraction or sugar-coating
+
+UX Philosophy
+
+The UX is designed for professional developers.
+
+Principles:
+
+Speed over spectacle
+
+Density over decoration
+
+Clarity over cleverness
+
+Control over automation
+
+The interface is calm, predictable, and confidence-building.
+It should feel lighter than an IDE, both visually and cognitively.
+
+Technical Direction
+
+The app is built as a desktop application using modern native-adjacent tooling.
+
+Key characteristics:
+
+Runs fully offline
+
+Uses local storage only
+
+Minimal memory footprint
+
+Fast cold start
+
+Direct filesystem and process access
+
+The architecture prioritizes:
+
+Explicit behavior
+
+Predictable performance
+
+Long-term maintainability
+
+Intended Outcome
+
+The intended outcome is a tool that becomes part of a developer’s daily workflow—opened dozens of times a week without friction.
+
+Whether used as:
+
+A personal productivity tool
+
+A portfolio-level demonstration of product thinking
+
+The foundation for a future commercial developer product
+
+…the app should clearly communicate one thing:
+
+This was built by someone who understands how developers actually work.
