@@ -1290,23 +1290,72 @@ async fn get_tool_versions() -> Vec<ToolVersion> {
         icon: "coffee".to_string(),
     });
     
-    // Flutter
-    let flutter_version = silent_command("flutter")
-        .args(["--version"])
-        .output()
-        .ok()
-        .and_then(|output| {
+    // Flutter - try multiple detection methods for Windows compatibility
+    let flutter_version = {
+        // Helper function to extract Flutter version from output
+        fn extract_flutter_version(output: &std::process::Output) -> Option<String> {
             if output.status.success() {
                 let stdout = String::from_utf8_lossy(&output.stdout);
                 stdout.lines()
                     .find(|line| line.starts_with("Flutter"))
-                    .and_then(|line| {
-                        line.split_whitespace().nth(1).map(|s| s.to_string())
-                    })
+                    .and_then(|line| line.split_whitespace().nth(1).map(|s| s.to_string()))
             } else {
                 None
             }
-        });
+        }
+        
+        // Try flutter command
+        silent_command("flutter")
+            .args(["--version"])
+            .output()
+            .ok()
+            .and_then(|output| extract_flutter_version(&output))
+            // Try flutter.bat on Windows
+            .or_else(|| {
+                #[cfg(target_os = "windows")]
+                {
+                    silent_command("flutter.bat")
+                        .args(["--version"])
+                        .output()
+                        .ok()
+                        .and_then(|output| extract_flutter_version(&output))
+                }
+                #[cfg(not(target_os = "windows"))]
+                {
+                    None
+                }
+            })
+            // Check common installation paths
+            .or_else(|| {
+                #[cfg(target_os = "windows")]
+                {
+                    let home_dir = dirs::home_dir().unwrap_or_default();
+                    let common_paths = [
+                        home_dir.join("flutter").join("bin").join("flutter.bat"),
+                        home_dir.join("development").join("flutter").join("bin").join("flutter.bat"),
+                        PathBuf::from("C:\\flutter\\bin\\flutter.bat"),
+                        PathBuf::from("C:\\src\\flutter\\bin\\flutter.bat"),
+                    ];
+                    for path in common_paths {
+                        if path.exists() {
+                            if let Ok(output) = silent_command(path.to_str().unwrap_or(""))
+                                .args(["--version"])
+                                .output()
+                            {
+                                if let Some(version) = extract_flutter_version(&output) {
+                                    return Some(version);
+                                }
+                            }
+                        }
+                    }
+                    None
+                }
+                #[cfg(not(target_os = "windows"))]
+                {
+                    None
+                }
+            })
+    };
     tools.push(ToolVersion {
         name: "Flutter".to_string(),
         version: flutter_version.clone(),
@@ -1406,7 +1455,51 @@ async fn check_tool_installed(tool: String) -> bool {
     let (cmd, args): (&str, &[&str]) = match tool.as_str() {
         "node" => ("node", &["--version"]),
         "python" => ("python", &["--version"]),
-        "flutter" => ("flutter", &["--version"]),
+        "flutter" => {
+            // Flutter needs special handling - try multiple approaches
+            // First, try flutter.bat on Windows (common issue)
+            #[cfg(target_os = "windows")]
+            {
+                // Try flutter.bat first (Windows)
+                if silent_command("flutter.bat")
+                    .args(["--version"])
+                    .output()
+                    .map(|o| o.status.success())
+                    .unwrap_or(false)
+                {
+                    return true;
+                }
+                // Try flutter without .bat
+                if silent_command("flutter")
+                    .args(["--version"])
+                    .output()
+                    .map(|o| o.status.success())
+                    .unwrap_or(false)
+                {
+                    return true;
+                }
+                // Check common Flutter installation paths on Windows
+                let home_dir = dirs::home_dir().unwrap_or_default();
+                let common_paths = [
+                    home_dir.join("flutter").join("bin").join("flutter.bat"),
+                    home_dir.join("development").join("flutter").join("bin").join("flutter.bat"),
+                    home_dir.join("dev").join("flutter").join("bin").join("flutter.bat"),
+                    PathBuf::from("C:\\flutter\\bin\\flutter.bat"),
+                    PathBuf::from("C:\\src\\flutter\\bin\\flutter.bat"),
+                    PathBuf::from("C:\\development\\flutter\\bin\\flutter.bat"),
+                ];
+                for path in common_paths {
+                    if path.exists() {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            #[cfg(not(target_os = "windows"))]
+            {
+                ("flutter", &["--version"])
+            }
+        }
         "java" => ("java", &["-version"]),
         "rust" | "cargo" => ("cargo", &["--version"]),
         "git" => ("git", &["--version"]),
@@ -1452,7 +1545,7 @@ async fn check_tool_installed(tool: String) -> bool {
             #[cfg(target_os = "macos")]
             {
                 // Check if Xcode is installed via xcode-select
-                return Command::new("xcode-select")
+                return silent_command("xcode-select")
                     .args(["-p"])
                     .output()
                     .map(|o| o.status.success())
@@ -1466,7 +1559,7 @@ async fn check_tool_installed(tool: String) -> bool {
         _ => return false,
     };
     
-    Command::new(cmd)
+    silent_command(cmd)
         .args(args)
         .output()
         .map(|o| o.status.success())

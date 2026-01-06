@@ -338,30 +338,50 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                         ? 'bg-emerald-500/10 border-emerald-500/30'
                                         : 'bg-slate-500/10 border-border-dim'
                                     }`}>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-start gap-3">
                                         {toolInstalled === null ? (
-                                            <Icon name="progress_activity" className="text-slate-400 animate-spin" />
+                                            <Icon name="progress_activity" className="text-slate-400 animate-spin mt-0.5" />
                                         ) : toolInstalled ? (
-                                            <Icon name="check_circle" className="text-emerald-400" />
+                                            <Icon name="check_circle" className="text-emerald-400 mt-0.5" />
                                         ) : (
-                                            <Icon name="error" className="text-red-400" />
+                                            <Icon name="error" className="text-red-400 mt-0.5" />
                                         )}
-                                        <div>
+                                        <div className="flex-1">
                                             <p className={`text-sm font-medium ${toolInstalled === false ? 'text-red-400' : toolInstalled ? 'text-emerald-400' : 'text-slate-400'}`}>
                                                 {toolInstalled === null && `Checking for ${selectedTemplate.requiresTool}...`}
                                                 {toolInstalled === true && `${selectedTemplate.requiresTool} is installed`}
-                                                {toolInstalled === false && `${selectedTemplate.requiresTool} is not installed`}
+                                                {toolInstalled === false && `${selectedTemplate.requiresTool} is not installed or not in PATH`}
                                             </p>
-                                            {toolInstalled === false && selectedTemplate.toolInstallUrl && (
-                                                <a
-                                                    href={selectedTemplate.toolInstallUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-                                                >
-                                                    Install {selectedTemplate.requiresTool}
-                                                    <Icon name="open_in_new" className="text-[14px]" />
-                                                </a>
+                                            {toolInstalled === false && (
+                                                <div className="mt-2 space-y-2">
+                                                    {selectedTemplate.requiresTool === 'flutter' && (
+                                                        <div className="text-xs text-slate-400 space-y-1">
+                                                            <p>If Flutter is installed but not detected:</p>
+                                                            <ol className="list-decimal list-inside space-y-1 text-slate-500">
+                                                                <li>Add Flutter's <code className="bg-surface px-1 rounded">bin</code> folder to your PATH</li>
+                                                                <li>Run <code className="bg-surface px-1 rounded">flutter doctor</code> to verify installation</li>
+                                                                <li>Restart DevLaunch after adding to PATH</li>
+                                                            </ol>
+                                                            <p className="mt-2">Common Flutter paths:</p>
+                                                            <ul className="list-disc list-inside text-slate-500 font-mono text-[10px]">
+                                                                <li>C:\flutter\bin</li>
+                                                                <li>C:\src\flutter\bin</li>
+                                                                <li>%USERPROFILE%\flutter\bin</li>
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                    {selectedTemplate.toolInstallUrl && (
+                                                        <a
+                                                            href={selectedTemplate.toolInstallUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                                                        >
+                                                            Download {selectedTemplate.requiresTool}
+                                                            <Icon name="open_in_new" className="text-[14px]" />
+                                                        </a>
+                                                    )}
+                                                </div>
                                             )}
                                         </div>
                                     </div>
