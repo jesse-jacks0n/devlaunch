@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { AppSettings, SortOption } from '../types';
 import { platform } from '@tauri-apps/plugin-os';
+import Icon from './Icon';
 
 declare global {
     interface Window {
@@ -108,14 +109,14 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                         onClick={onClose}
                         className="flex items-center justify-center size-8 rounded hover:bg-surface text-slate-400 hover:text-white transition-colors"
                     >
-                        <span className="material-symbols-outlined">close</span>
+                        <Icon name="close" />
                     </button>
                 </div>
 
                 {/* IDE Settings */}
                 <section className="mb-8">
                     <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px] text-primary">code</span>
+                        <Icon name="code" className="text-[18px] text-primary" />
                         IDE Configuration
                     </h3>
                     <div className="bg-surface border border-border-dim rounded-lg p-4 space-y-4">
@@ -132,7 +133,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                                                 : 'bg-surface-highlight border-border-dim text-slate-400 hover:text-white hover:border-border-dim/80'
                                             }`}
                                     >
-                                        <span className="material-symbols-outlined text-[18px]">{ide.icon}</span>
+                                        <Icon name={ide.icon} className="text-[18px]" />
                                         <span className="text-sm font-medium">{ide.label}</span>
                                     </button>
                                 ))}
@@ -176,7 +177,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                 {/* Appearance Settings */}
                 <section className="mb-8">
                     <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px] text-primary">palette</span>
+                        <Icon name="palette" className="text-[18px] text-primary" />
                         Appearance
                     </h3>
                     <div className="bg-surface border border-border-dim rounded-lg p-4 space-y-6">
@@ -192,7 +193,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                                             : 'bg-surface-highlight border-border-dim text-slate-400 hover:text-white hover:border-border-dim/80'
                                         }`}
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">dark_mode</span>
+                                    <Icon name="dark_mode" className="text-[18px]" />
                                     <span className="text-sm font-medium">Dark</span>
                                 </button>
                                 <button
@@ -203,7 +204,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                                             : 'bg-surface-highlight border-border-dim text-slate-400 hover:text-white hover:border-border-dim/80'
                                         }`}
                                 >
-                                    <span className="material-symbols-outlined text-[18px]">light_mode</span>
+                                    <Icon name="light_mode" className="text-[18px]" />
                                     <span className="text-sm font-medium">Light</span>
                                 </button>
                             </div>
@@ -247,7 +248,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                 {/* Behavior Settings */}
                 <section className="mb-8">
                     <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px] text-primary">tune</span>
+                        <Icon name="tune" className="text-[18px] text-primary" />
                         Behavior
                     </h3>
                     <div className="bg-surface border border-border-dim rounded-lg divide-y divide-border-dim">
@@ -309,7 +310,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                 {/* Danger Zone */}
                 <section className="mb-8">
                     <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px] text-red-400">warning</span>
+                        <Icon name="warning" className="text-[18px] text-red-400" />
                         Danger Zone
                     </h3>
                     <div className="bg-surface border border-red-500/20 rounded-lg p-4">
@@ -331,7 +332,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                 {/* About */}
                 <section>
                     <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px] text-primary">info</span>
+                        <Icon name="info" className="text-[18px] text-primary" />
                         About
                     </h3>
                     <div className="bg-surface border border-border-dim rounded-lg p-4 space-y-4">
@@ -347,7 +348,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
                             <p className="text-xs text-slate-500 mb-2">Created by</p>
                             <div className="flex items-center gap-3">
                                 <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[16px] text-primary">person</span>
+                                    <Icon name="person" className="text-[16px] text-primary" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium text-white">Jesse Jackson</p>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Icon from './Icon';
 
 interface TagsModalProps {
     isOpen: boolean;
@@ -99,7 +100,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border-dim bg-surface/50">
                     <div className="flex items-center gap-3">
                         <div className="size-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-[24px] text-primary">label</span>
+                            <Icon name="label" className="text-[24px] text-primary" />
                         </div>
                         <div>
                             <h2 className="text-lg font-bold text-white">Manage Tags</h2>
@@ -110,7 +111,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
                         onClick={onClose}
                         className="size-8 rounded-lg hover:bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
                     >
-                        <span className="material-symbols-outlined text-[20px]">close</span>
+                        <Icon name="close" className="text-[20px]" />
                     </button>
                 </div>
 
@@ -130,7 +131,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
                                         onClick={() => handleRemoveTag(tag)}
                                         className="hover:text-white transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[14px]">close</span>
+                                        <Icon name="close" className="text-[14px]" />
                                     </button>
                                 </span>
                             );
@@ -219,7 +220,7 @@ const TagsModal: React.FC<TagsModalProps> = ({
                             disabled={!hasChanges}
                             className="btn-primary px-4 py-2 bg-primary hover:bg-primary/80 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
                         >
-                            <span className="material-symbols-outlined text-[16px]">save</span>
+                            <Icon name="save" className="text-[16px]" />
                             Save Tags
                         </button>
                     </div>

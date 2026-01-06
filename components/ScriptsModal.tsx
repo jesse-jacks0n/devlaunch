@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ProjectScript } from '../types';
+import Icon from './Icon';
 
 interface ScriptsModalProps {
     isOpen: boolean;
@@ -101,7 +102,7 @@ const ScriptsModal: React.FC<ScriptsModalProps> = ({
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border-dim bg-surface/50">
                     <div className="flex items-center gap-3">
                         <div className="size-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-[24px] text-primary">terminal</span>
+                            <Icon name="terminal" className="text-[24px] text-primary" />
                         </div>
                         <div>
                             <h2 className="text-lg font-bold text-white">Run Scripts</h2>
@@ -112,14 +113,14 @@ const ScriptsModal: React.FC<ScriptsModalProps> = ({
                         onClick={onClose}
                         className="size-8 rounded-lg hover:bg-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
                     >
-                        <span className="material-symbols-outlined text-[20px]">close</span>
+                        <Icon name="close" className="text-[20px]" />
                     </button>
                 </div>
 
                 {/* Search */}
                 <div className="px-6 py-3 border-b border-border-dim">
                     <div className="relative">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-500">search</span>
+                        <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-500" />
                         <input
                             type="text"
                             value={searchQuery}
@@ -135,17 +136,17 @@ const ScriptsModal: React.FC<ScriptsModalProps> = ({
                 <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-12 gap-3">
-                            <span className="material-symbols-outlined text-[32px] text-primary animate-spin">progress_activity</span>
+                            <Icon name="progress_activity" className="text-[32px] text-primary animate-spin" />
                             <p className="text-sm text-slate-400">Loading scripts...</p>
                         </div>
                     ) : scripts.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-12 gap-3">
-                            <span className="material-symbols-outlined text-[48px] text-slate-600">code_off</span>
+                            <Icon name="code_off" className="text-[48px] text-slate-600" />
                             <p className="text-sm text-slate-400">No scripts found in package.json</p>
                         </div>
                     ) : filteredScripts.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-12 gap-3">
-                            <span className="material-symbols-outlined text-[48px] text-slate-600">search_off</span>
+                            <Icon name="search_off" className="text-[48px] text-slate-600" />
                             <p className="text-sm text-slate-400">No scripts match "{searchQuery}"</p>
                         </div>
                     ) : (
@@ -153,9 +154,7 @@ const ScriptsModal: React.FC<ScriptsModalProps> = ({
                             {sortedCategories.map(category => (
                                 <div key={category}>
                                     <div className="flex items-center gap-2 px-2 mb-2">
-                                        <span className={`material-symbols-outlined text-[14px] ${getCategoryColor(category)}`}>
-                                            {getCategoryIcon(category)}
-                                        </span>
+                                        <Icon name={getCategoryIcon(category)} className={`text-[14px] ${getCategoryColor(category)}`} />
                                         <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
                                             {category}
                                         </span>
@@ -184,12 +183,12 @@ const ScriptsModal: React.FC<ScriptsModalProps> = ({
                                                 >
                                                     {runningScript === script.name ? (
                                                         <>
-                                                            <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                                                            <Icon name="progress_activity" className="text-[14px] animate-spin" />
                                                             Running...
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <span className="material-symbols-outlined text-[14px]">play_arrow</span>
+                                                            <Icon name="play_arrow" className="text-[14px]" />
                                                             Run
                                                         </>
                                                     )}

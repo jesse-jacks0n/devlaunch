@@ -1,5 +1,6 @@
 import React from 'react';
 import { Toast } from '../types';
+import Icon from './Icon';
 
 interface ToastContainerProps {
     toasts: Toast[];
@@ -34,15 +35,13 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove }) => 
                     key={toast.id}
                     className={`flex items-center gap-3 px-4 py-3 rounded border backdrop-blur-md animate-slide-in ${getStyles(toast.type)}`}
                 >
-                    <span className={`material-symbols-outlined text-[20px]`}>
-                        {getIcon(toast.type)}
-                    </span>
+                    <Icon name={getIcon(toast.type)} className="text-[20px]" />
                     <p className="text-sm flex-1">{toast.message}</p>
                     <button
                         onClick={() => onRemove(toast.id)}
                         className="text-slate-400 hover:text-white transition-colors"
                     >
-                        <span className="material-symbols-outlined text-[16px]">close</span>
+                        <Icon name="close" className="text-[16px]" />
                     </button>
                 </div>
             ))}

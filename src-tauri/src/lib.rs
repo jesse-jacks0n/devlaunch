@@ -9,6 +9,21 @@ use tauri::{
 };
 use tauri_plugin_autostart::MacosLauncher;
 
+// Windows-specific imports for hiding console windows
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+#[cfg(target_os = "windows")]
+const CREATE_NO_WINDOW: u32 = 0x08000000;
+
+/// Creates a Command that won't show a console window on Windows
+fn silent_command(program: &str) -> Command {
+    let mut cmd = Command::new(program);
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(CREATE_NO_WINDOW);
+    cmd
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct TechStack {
     name: String,
@@ -336,7 +351,7 @@ fn get_git_info(project_path: &Path) -> GitStatus {
     }
 
     // Get current branch
-    let branch = Command::new("git")
+    let branch = silent_command("git")
         .args(["rev-parse", "--abbrev-ref", "HEAD"])
         .current_dir(project_path)
         .output()
@@ -351,7 +366,7 @@ fn get_git_info(project_path: &Path) -> GitStatus {
         .unwrap_or_else(|| "unknown".to_string());
 
     // Get status
-    let status_output = Command::new("git")
+    let status_output = silent_command("git")
         .args(["status", "--porcelain"])
         .current_dir(project_path)
         .output();
@@ -1044,7 +1059,7 @@ async fn run_script(path: String, script_name: String, package_manager: Option<S
 
 #[tauri::command]
 async fn git_pull(path: String) -> Result<String, String> {
-    let output = Command::new("git")
+    let output = silent_command("git")
         .args(["pull"])
         .current_dir(&path)
         .output()
@@ -1061,7 +1076,7 @@ async fn git_pull(path: String) -> Result<String, String> {
 
 #[tauri::command]
 async fn git_fetch(path: String) -> Result<String, String> {
-    let output = Command::new("git")
+    let output = silent_command("git")
         .args(["fetch", "--all"])
         .current_dir(&path)
         .output()
@@ -1086,7 +1101,7 @@ async fn check_health(path: String) -> Result<HealthStatus, String> {
     let pm = detect_package_manager(&project_path).unwrap_or_else(|| "npm".to_string());
     
     // Check for outdated packages
-    let outdated_output = Command::new(&pm)
+    let outdated_output = silent_command(&pm)
         .args(["outdated", "--json"])
         .current_dir(&path)
         .output();
@@ -1101,7 +1116,7 @@ async fn check_health(path: String) -> Result<HealthStatus, String> {
         .unwrap_or(0);
 
     // Run npm audit for vulnerabilities
-    let audit_output = Command::new("npm")
+    let audit_output = silent_command("npm")
         .args(["audit", "--json"])
         .current_dir(&path)
         .output();
@@ -1150,6 +1165,7 @@ async fn create_project_from_template(path: String, template: String, project_na
         _ => return Err(format!("Unknown template: {}", template)),
     };
 
+    // Project creation needs to show the terminal for user interaction
     let output = Command::new(cmd)
         .args(&args)
         .current_dir(&path)
@@ -1192,7 +1208,7 @@ pub struct ToolVersion {
 }
 
 fn get_command_version(cmd: &str, args: &[&str]) -> Option<String> {
-    Command::new(cmd)
+    silent_command(cmd)
         .args(args)
         .output()
         .ok()
@@ -1253,7 +1269,7 @@ async fn get_tool_versions() -> Vec<ToolVersion> {
     });
     
     // Java
-    let java_version = Command::new("java")
+    let java_version = silent_command("java")
         .args(["-version"])
         .output()
         .ok()
@@ -1275,7 +1291,7 @@ async fn get_tool_versions() -> Vec<ToolVersion> {
     });
     
     // Flutter
-    let flutter_version = Command::new("flutter")
+    let flutter_version = silent_command("flutter")
         .args(["--version"])
         .output()
         .ok()

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Project } from '../types';
+import Icon from './Icon';
 
 interface ActivityItem {
     id: string;
@@ -113,7 +114,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                             onClick={onClose}
                             className="size-8 rounded flex items-center justify-center hover:bg-white/5 text-slate-400 hover:text-white transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+                            <Icon name="arrow_back" className="text-[20px]" />
                         </button>
                         <div>
                             <h2 className="text-white text-xl font-bold tracking-tight">Activity Log</h2>
@@ -127,7 +128,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                             onClick={onClearActivity}
                             className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[16px]">delete_sweep</span>
+                            <Icon name="delete_sweep" className="text-[16px]" />
                             Clear History
                         </button>
                     )}
@@ -151,7 +152,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                                     : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
                                 }`}
                         >
-                            <span className="material-symbols-outlined text-[14px]">{tab.icon}</span>
+                            <Icon name={tab.icon} className="text-[14px]" />
                             {tab.label}
                         </button>
                     ))}
@@ -166,7 +167,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                         <div className="bg-surface border border-border-dim rounded-lg p-4">
                             <div className="flex items-center gap-3">
                                 <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-primary">today</span>
+                                    <Icon name="today" className="text-primary" />
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold text-white">{todayCount}</p>
@@ -177,7 +178,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                         <div className="bg-surface border border-border-dim rounded-lg p-4">
                             <div className="flex items-center gap-3">
                                 <div className="size-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-emerald-400">date_range</span>
+                                    <Icon name="date_range" className="text-emerald-400" />
                                 </div>
                                 <div>
                                     <p className="text-2xl font-bold text-white">{weekCount}</p>
@@ -188,7 +189,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                         <div className="bg-surface border border-border-dim rounded-lg p-4">
                             <div className="flex items-center gap-3">
                                 <div className="size-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-amber-400">star</span>
+                                    <Icon name="star" className="text-amber-400" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-bold text-white truncate" title={topProject?.[0]}>
@@ -204,7 +205,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                     {filteredActivity.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-16 text-center">
                             <div className="size-16 rounded-full bg-surface flex items-center justify-center mb-4">
-                                <span className="material-symbols-outlined text-[32px] text-slate-600">history</span>
+                                <Icon name="history" className="text-[32px] text-slate-600" />
                             </div>
                             <h3 className="text-lg font-semibold text-white mb-2">No Activity Yet</h3>
                             <p className="text-sm text-slate-500 max-w-sm">
@@ -225,7 +226,7 @@ const ActivityPage: React.FC<ActivityPageProps> = ({ projects, activityLog, onCl
                                                 className="flex items-center gap-4 p-3 bg-surface border border-border-dim rounded-lg hover:border-border-dim/80 transition-colors"
                                             >
                                                 <div className={`size-10 rounded-lg flex items-center justify-center ${item.iconColor}`}>
-                                                    <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                                                    <Icon name={item.icon} className="text-[20px]" />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-sm font-medium text-white">{item.description}</p>

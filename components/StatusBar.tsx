@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
+import Icon from './Icon';
 
 interface ToolVersion {
     name: string;
@@ -49,12 +50,12 @@ const StatusBar: React.FC<StatusBarProps> = ({ projectCount }) => {
 
     const getToolIcon = (tool: ToolVersion) => {
         switch (tool.name) {
-            case 'Node.js': return 'hexagon';
-            case 'Python': return 'code';
-            case 'Java': return 'coffee';
-            case 'Flutter': return 'phone_iphone';
-            case 'Rust': return 'memory';
-            case 'Git': return 'commit';
+            case 'Node.js': return 'nodejs';
+            case 'Python': return 'python';
+            case 'Java': return 'java';
+            case 'Flutter': return 'flutter';
+            case 'Rust': return 'rust';
+            case 'Git': return 'git_logo';
             default: return 'code';
         }
     };
@@ -83,9 +84,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ projectCount }) => {
                                     className="flex items-center gap-1 group relative"
                                     title={`${tool.name} ${tool.version || 'installed'}`}
                                 >
-                                    <span className={`material-symbols-outlined text-[12px] ${getToolColor(tool)}`}>
-                                        {getToolIcon(tool)}
-                                    </span>
+                                    <Icon name={getToolIcon(tool)} className={`text-[12px] ${getToolColor(tool)}`} />
                                     <span className={`text-[10px] font-mono ${getToolColor(tool)}`}>
                                         {tool.version ? `v${tool.version.split('.').slice(0, 2).join('.')}` : '✓'}
                                     </span>
@@ -101,7 +100,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ projectCount }) => {
                 <span className="text-[10px] font-mono text-slate-500">Tauri v2.0</span>
                 <div className="h-3 w-px bg-white/10"></div>
                 <div className="flex items-center gap-1 text-slate-500">
-                    <span className="material-symbols-outlined text-[12px]">desktop_windows</span>
+                    <Icon name="desktop_windows" className="text-[12px]" />
                     <span className="text-[10px] font-mono">Desktop</span>
                 </div>
             </div>

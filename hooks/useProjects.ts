@@ -453,6 +453,45 @@ export function useProjects() {
         }
     }, [projects, addToast, clearSelection]);
 
+    const bulkCleanBuildFolders = useCallback(async (projectIds: string[]) => {
+        const projectsToClean = projectIds
+            .map(id => projects.find(p => p.id === id))
+            .filter(p => p && p.hasBuildFolder && !p.hasNodeModules);
+
+        if (projectsToClean.length === 0) {
+            addToast('No projects with build folders selected', 'warning');
+            return;
+        }
+
+        try {
+            addToast(`Cleaning build folders from ${projectsToClean.length} projects...`, 'info');
+            let successCount = 0;
+
+            for (const project of projectsToClean) {
+                if (!project) continue;
+                try {
+                    await invoke<string>('clean_build_folder', {
+                        path: project.path,
+                        projectType: project.projectType
+                    });
+                    successCount++;
+                } catch (e) {
+                    console.error(`Failed to clean ${project.name}:`, e);
+                }
+            }
+
+            // Refresh all cleaned projects
+            for (const project of projectsToClean) {
+                if (project) await refreshProject(project.id);
+            }
+
+            addToast(`Completed: ${successCount}/${projectsToClean.length} build folders cleaned`, 'success');
+            clearSelection();
+        } catch (e) {
+            addToast(`Bulk clean failed: ${e}`, 'error');
+        }
+    }, [projects, addToast, clearSelection, refreshProject]);
+
     return {
         projects,
         sortedProjects,
@@ -479,6 +518,7 @@ export function useProjects() {
         deleteNodeModules,
         cleanBuildFolder,
         bulkDeleteNodeModules,
+        bulkCleanBuildFolders,
         gitPull,
         gitFetch,
         checkHealth,

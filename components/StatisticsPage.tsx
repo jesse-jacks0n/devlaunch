@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Project } from '../types';
+import Icon from './Icon';
 
 interface StatisticsPageProps {
     projects: Project[];
@@ -15,7 +16,7 @@ interface DonutChartProps {
     centerValue?: string | number;
 }
 
-const DonutChart: React.FC<DonutChartProps> = ({ data, size = 180, strokeWidth = 32, title, centerValue }) => {
+const DonutChart: React.FC<DonutChartProps> = ({ data, size = 160, strokeWidth = 12, title, centerValue }) => {
     const total = data.reduce((sum, item) => sum + item.value, 0);
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
@@ -32,8 +33,7 @@ const DonutChart: React.FC<DonutChartProps> = ({ data, size = 180, strokeWidth =
                     cy={center}
                     r={radius}
                     fill="none"
-                    className="chart-bg-circle"
-                    stroke="currentColor"
+                    stroke="rgba(255, 255, 255, 0.1)"
                     strokeWidth={strokeWidth}
                 />
                 {/* Data segments */}
@@ -52,6 +52,7 @@ const DonutChart: React.FC<DonutChartProps> = ({ data, size = 180, strokeWidth =
                             fill="none"
                             stroke={item.color}
                             strokeWidth={strokeWidth}
+                            strokeLinecap="round"
                             strokeDasharray={`${dashLength} ${circumference - dashLength}`}
                             strokeDashoffset={circumference / 4 + dashOffset}
                             className="transition-all duration-500"
@@ -191,7 +192,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                         onClick={onClose}
                         className="flex items-center justify-center size-8 rounded hover:bg-surface text-slate-400 hover:text-white transition-colors"
                     >
-                        <span className="material-symbols-outlined">close</span>
+                        <Icon name="close" />
                     </button>
                 </div>
 
@@ -200,7 +201,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     <div className="bg-surface border border-border-dim rounded-lg p-4">
                         <div className="flex items-center gap-3">
                             <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-primary">folder</span>
+                                <Icon name="folder" className="text-primary" />
                             </div>
                             <div>
                                 <p className="text-2xl font-bold text-white">{projects.length}</p>
@@ -211,7 +212,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     <div className="bg-surface border border-border-dim rounded-lg p-4">
                         <div className="flex items-center gap-3">
                             <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-primary">hard_drive</span>
+                                <Icon name="hard_drive" className="text-primary" />
                             </div>
                             <div>
                                 <p className="text-2xl font-bold text-white">{formatBytes(storageStats.totalStorage)}</p>
@@ -222,7 +223,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     <div className="bg-surface border border-border-dim rounded-lg p-4">
                         <div className="flex items-center gap-3">
                             <div className="size-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-orange-400">inventory_2</span>
+                                <Icon name="inventory_2" className="text-orange-400" />
                             </div>
                             <div>
                                 <p className="text-2xl font-bold text-white">{storageStats.withNodeModules}</p>
@@ -233,7 +234,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     <div className="bg-surface border border-border-dim rounded-lg p-4">
                         <div className="flex items-center gap-3">
                             <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-primary">code</span>
+                                <Icon name="code" className="text-primary" />
                             </div>
                             <div>
                                 <p className="text-2xl font-bold text-white">{techStackStats.length}</p>
@@ -248,7 +249,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     {/* Storage by Project */}
                     <div className="bg-surface border border-border-dim rounded-lg p-6">
                         <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[18px] text-primary">pie_chart</span>
+                            <Icon name="pie_chart" className="text-[18px] text-primary" />
                             Storage by Project
                         </h3>
                         <div className="flex flex-col items-center">
@@ -270,7 +271,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     {/* Tech Stack Usage */}
                     <div className="bg-surface border border-border-dim rounded-lg p-6">
                         <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[18px] text-primary">donut_large</span>
+                            <Icon name="donut_large" className="text-[18px] text-primary" />
                             Tech Stack Usage
                         </h3>
                         <div className="flex flex-col items-center">
@@ -292,7 +293,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                     {/* node_modules Status */}
                     <div className="bg-surface border border-border-dim rounded-lg p-6">
                         <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[18px] text-primary">inventory</span>
+                            <Icon name="inventory" className="text-[18px] text-primary" />
                             Dependencies Status
                         </h3>
                         <div className="flex flex-col items-center">
@@ -316,7 +317,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                 <div className="bg-surface border border-border-dim rounded-lg overflow-hidden">
                     <div className="px-6 py-4 border-b border-border-dim">
                         <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[18px] text-primary">storage</span>
+                            <Icon name="storage" className="text-[18px] text-primary" />
                             Storage Breakdown
                         </h3>
                     </div>
@@ -335,7 +336,7 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                                             <div className="flex items-center gap-2 mt-0.5">
                                                 {project.hasNodeModules && (
                                                     <span className="text-[10px] text-orange-400 font-mono flex items-center gap-1">
-                                                        <span className="material-symbols-outlined text-[10px]">folder</span>
+                                                        <Icon name="folder" className="text-[10px]" />
                                                         node_modules
                                                     </span>
                                                 )}
@@ -343,11 +344,12 @@ const StatisticsPage: React.FC<StatisticsPageProps> = ({ projects, onClose }) =>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-32 h-2 bg-background-dark rounded-full overflow-hidden">
+                                        <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
                                             <div
-                                                className="h-full bg-gradient-to-r from-primary to-accent-light transition-all duration-500"
+                                                className="h-full rounded-full transition-all duration-500"
                                                 style={{
-                                                    width: `${storageStats.totalStorage > 0 ? (project.bytes / storageStats.totalStorage) * 100 : 0}%`
+                                                    width: `${storageStats.totalStorage > 0 ? (project.bytes / storageStats.totalStorage) * 100 : 0}%`,
+                                                    background: 'linear-gradient(to right, var(--accent-color), color-mix(in srgb, var(--accent-color), #ffffff 40%))'
                                                 }}
                                             />
                                         </div>

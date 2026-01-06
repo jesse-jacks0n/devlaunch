@@ -1,5 +1,6 @@
 import React from 'react';
 import { ViewType } from '../types';
+import Icon from './Icon';
 
 interface SidebarProps {
     currentView: ViewType;
@@ -18,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, projectCou
                 {/* Brand */}
                 <div className="h-16 flex items-center px-5 border-b border-border-dim">
                     <div className="flex items-center gap-3">
-                        
+
                         <div>
                             <h1 className="text-white text-sm font-bold tracking-tight">DevLaunch</h1>
                             <p className="text-xs text-slate-500 font-mono">v3.0.1-beta</p>
@@ -36,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, projectCou
                                 : 'hover:bg-white/5 text-slate-400 hover:text-white border border-transparent'
                             }`}
                     >
-                        <span className={`material-symbols-outlined ${currentView === 'library' ? 'text-primary icon-fill' : ''}`}>folder_open</span>
+                        <Icon name="folder_open" className={currentView === 'library' ? 'text-primary' : ''} />
                         <span className="text-sm font-medium">Library</span>
                         <span className="ml-auto text-[10px] font-mono text-slate-500">{projectCount}</span>
                     </button>
@@ -48,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, projectCou
                                 : 'hover:bg-white/5 text-slate-400 hover:text-white border border-transparent'
                             }`}
                     >
-                        <span className={`material-symbols-outlined ${currentView === 'activity' ? 'text-primary icon-fill' : ''}`}>monitoring</span>
+                        <Icon name="monitoring" className={currentView === 'activity' ? 'text-primary' : ''} />
                         <span className="text-sm font-medium">Activity</span>
                     </button>
                     <button
@@ -59,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, projectCou
                                 : 'hover:bg-white/5 text-slate-400 hover:text-white border border-transparent'
                             }`}
                     >
-                        <span className={`material-symbols-outlined ${currentView === 'statistics' ? 'text-primary icon-fill' : ''}`}>pie_chart</span>
+                        <Icon name="pie_chart" className={currentView === 'statistics' ? 'text-primary' : ''} />
                         <span className="text-sm font-medium">Statistics</span>
                     </button>
 
@@ -96,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, projectCou
                                 : 'hover:bg-white/5 text-slate-400 hover:text-white border border-transparent'
                             }`}
                     >
-                        <span className={`material-symbols-outlined ${currentView === 'settings' ? 'text-primary' : ''}`}>settings</span>
+                        <Icon name="settings" className={currentView === 'settings' ? 'text-primary' : ''} />
                         <span className="text-sm font-medium">Settings</span>
                     </button>
                     <button
@@ -104,9 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, projectCou
                         className="size-9 flex items-center justify-center rounded border border-transparent hover:bg-white/5 text-slate-400 hover:text-white transition-all"
                         title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                     >
-                        <span className="material-symbols-outlined text-[20px]">
-                            {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-                        </span>
+                        <Icon name={theme === 'dark' ? 'light_mode' : 'dark_mode'} className="text-[20px]" />
                     </button>
                 </div>
                 {/* <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2 rounded hover:bg-white/5 text-slate-400 hover:text-white transition-all">

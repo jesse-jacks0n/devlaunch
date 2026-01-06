@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
 import { platform } from '@tauri-apps/plugin-os';
 import { FRAMEWORK_TEMPLATES, FrameworkTemplate } from '../constants';
+import Icon from './Icon';
 
 interface NewProjectModalProps {
     isOpen: boolean;
@@ -178,7 +179,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                 onClick={handleBack}
                                 className="size-8 flex items-center justify-center rounded hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
                             >
-                                <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+                                <Icon name="arrow_back" className="text-[20px]" />
                             </button>
                         )}
                         <div>
@@ -198,7 +199,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                         onClick={onClose}
                         className="size-8 flex items-center justify-center rounded hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
                     >
-                        <span className="material-symbols-outlined">close</span>
+                        <Icon name="close" />
                     </button>
                 </div>
 
@@ -215,7 +216,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                 className="flex flex-col items-center gap-4 p-8 rounded-xl border-2 border-border-dim hover:border-primary/50 bg-surface-highlight/50 hover:bg-surface-highlight transition-all group"
                             >
                                 <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                                    <span className="material-symbols-outlined text-[32px] text-primary">folder_open</span>
+                                    <Icon name="folder_open" className="text-[32px] text-primary" />
                                 </div>
                                 <div className="text-center">
                                     <h3 className="text-white font-semibold mb-1">Import Existing</h3>
@@ -228,7 +229,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                 className="flex flex-col items-center gap-4 p-8 rounded-xl border-2 border-border-dim hover:border-emerald-500/50 bg-surface-highlight/50 hover:bg-surface-highlight transition-all group"
                             >
                                 <div className="size-16 rounded-full bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-                                    <span className="material-symbols-outlined text-[32px] text-emerald-400">add_circle</span>
+                                    <Icon name="add_circle" className="text-[32px] text-emerald-400" />
                                 </div>
                                 <div className="text-center">
                                     <h3 className="text-white font-semibold mb-1">Create New</h3>
@@ -253,7 +254,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                                 : 'bg-surface border border-border-dim text-slate-400 hover:text-white hover:border-slate-500'
                                             }`}
                                     >
-                                        <span className="material-symbols-outlined text-[16px]">{cat.icon}</span>
+                                        <Icon name={cat.icon} className="text-[16px]" />
                                         {cat.label}
                                     </button>
                                 ))}
@@ -271,9 +272,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                         className="flex items-start gap-3 p-4 rounded-lg border border-border-dim hover:border-primary/50 bg-surface-highlight/30 hover:bg-surface-highlight transition-all text-left group"
                                     >
                                         <div className="size-10 rounded-lg bg-surface flex items-center justify-center shrink-0 border border-border-dim group-hover:border-primary/30">
-                                            <span className="material-symbols-outlined text-[20px] text-slate-400 group-hover:text-primary">
-                                                {template.icon}
-                                            </span>
+                                            <Icon name={template.icon} className="text-[20px] text-slate-400 group-hover:text-primary" />
                                         </div>
                                         <div className="min-w-0">
                                             <h4 className="text-sm font-medium text-white truncate">{template.name}</h4>
@@ -299,7 +298,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                             {/* Template Info */}
                             <div className="flex items-center gap-4 p-4 rounded-lg bg-surface-highlight/50 border border-border-dim">
                                 <div className="size-12 rounded-lg bg-surface flex items-center justify-center border border-border-dim">
-                                    <span className="material-symbols-outlined text-[24px] text-primary">{selectedTemplate.icon}</span>
+                                    <Icon name={selectedTemplate.icon} className="text-[24px] text-primary" />
                                 </div>
                                 <div>
                                     <h3 className="text-white font-medium">{selectedTemplate.name}</h3>
@@ -311,7 +310,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                             {selectedTemplate.manualSetupMessage && (
                                 <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
                                     <div className="flex items-start gap-3">
-                                        <span className="material-symbols-outlined text-amber-400">info</span>
+                                        <Icon name="info" className="text-amber-400" />
                                         <div>
                                             <h4 className="text-sm font-medium text-amber-400 mb-1">Manual Setup Required</h4>
                                             <p className="text-sm text-slate-300">{selectedTemplate.manualSetupMessage}</p>
@@ -323,7 +322,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                                     className="inline-flex items-center gap-1 mt-2 text-sm text-primary hover:underline"
                                                 >
                                                     Download {selectedTemplate.requiresTool}
-                                                    <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+                                                    <Icon name="open_in_new" className="text-[14px]" />
                                                 </a>
                                             )}
                                         </div>
@@ -341,11 +340,11 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                     }`}>
                                     <div className="flex items-center gap-3">
                                         {toolInstalled === null ? (
-                                            <span className="material-symbols-outlined text-slate-400 animate-spin">progress_activity</span>
+                                            <Icon name="progress_activity" className="text-slate-400 animate-spin" />
                                         ) : toolInstalled ? (
-                                            <span className="material-symbols-outlined text-emerald-400">check_circle</span>
+                                            <Icon name="check_circle" className="text-emerald-400" />
                                         ) : (
-                                            <span className="material-symbols-outlined text-red-400">error</span>
+                                            <Icon name="error" className="text-red-400" />
                                         )}
                                         <div>
                                             <p className={`text-sm font-medium ${toolInstalled === false ? 'text-red-400' : toolInstalled ? 'text-emerald-400' : 'text-slate-400'}`}>
@@ -361,7 +360,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                                     className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                                                 >
                                                     Install {selectedTemplate.requiresTool}
-                                                    <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+                                                    <Icon name="open_in_new" className="text-[14px]" />
                                                 </a>
                                             )}
                                         </div>
@@ -403,7 +402,7 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                                                 onClick={handleSelectFolder}
                                                 className="px-4 py-2.5 bg-surface border border-border-dim rounded-lg text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
                                             >
-                                                <span className="material-symbols-outlined text-[20px]">folder_open</span>
+                                                <Icon name="folder_open" className="text-[20px]" />
                                             </button>
                                         </div>
                                     </div>
@@ -458,12 +457,12 @@ const NewProjectModal: React.FC<NewProjectModalProps> = ({
                             >
                                 {isCreating ? (
                                     <>
-                                        <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+                                        <Icon name="progress_activity" className="text-[18px] animate-spin" />
                                         Creating...
                                     </>
                                 ) : (
                                     <>
-                                        <span className="material-symbols-outlined text-[18px]">terminal</span>
+                                        <Icon name="terminal" className="text-[18px]" />
                                         Create Project
                                     </>
                                 )}

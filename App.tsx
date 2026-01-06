@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import Icon from './components/Icon';
 import Sidebar from './components/Sidebar';
 import StatusBar from './components/StatusBar';
 import ProjectList from './components/ProjectList';
@@ -110,6 +111,7 @@ const App: React.FC = () => {
         updateNotes,
         updateTags,
         bulkDeleteNodeModules,
+        bulkCleanBuildFolders,
     } = useProjects();
 
     const {
@@ -340,24 +342,44 @@ const App: React.FC = () => {
     }, [projects, openTerminal, addActivity]);
 
     const handleBulkDeleteNodeModules = useCallback(() => {
-        const selectedProjects = projects.filter(p => selectedIds.has(p.id) && p.hasNodeModules);
-        if (selectedProjects.length === 0) return;
+        const selectedProjectsList = projects.filter(p => selectedIds.has(p.id) && p.hasNodeModules);
+        if (selectedProjectsList.length === 0) return;
 
         setConfirmDialog({
             isOpen: true,
             title: 'Delete all node_modules?',
-            message: `This will delete node_modules from ${selectedProjects.length} project${selectedProjects.length > 1 ? 's' : ''}. This action cannot be undone.`,
+            message: `This will delete node_modules from ${selectedProjectsList.length} project${selectedProjectsList.length > 1 ? 's' : ''}. This action cannot be undone.`,
             variant: 'warning',
             onConfirm: async () => {
                 setConfirmDialog(prev => ({ ...prev, isOpen: false }));
                 setBulkDeleting(true);
-                const paths = selectedProjects.map(p => p.path);
-                await bulkDeleteNodeModules(paths);
+                const ids = selectedProjectsList.map(p => p.id);
+                await bulkDeleteNodeModules(ids);
                 setBulkDeleting(false);
                 clearSelection();
             },
         });
     }, [projects, selectedIds, bulkDeleteNodeModules, clearSelection]);
+
+    const handleBulkCleanBuildFolders = useCallback(() => {
+        const selectedProjectsList = projects.filter(p => selectedIds.has(p.id) && p.hasBuildFolder && !p.hasNodeModules);
+        if (selectedProjectsList.length === 0) return;
+
+        setConfirmDialog({
+            isOpen: true,
+            title: 'Clean all build folders?',
+            message: `This will clean build folders from ${selectedProjectsList.length} project${selectedProjectsList.length > 1 ? 's' : ''}. This action cannot be undone.`,
+            variant: 'warning',
+            onConfirm: async () => {
+                setConfirmDialog(prev => ({ ...prev, isOpen: false }));
+                setBulkDeleting(true);
+                const ids = selectedProjectsList.map(p => p.id);
+                await bulkCleanBuildFolders(ids);
+                setBulkDeleting(false);
+                clearSelection();
+            },
+        });
+    }, [projects, selectedIds, bulkCleanBuildFolders, clearSelection]);
 
     const handleTagFilterClick = (tag: string) => {
         if (filterTags.includes(tag)) {
@@ -443,11 +465,9 @@ const App: React.FC = () => {
                                             onClick={() => setShowSortDropdown(!showSortDropdown)}
                                             className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border-dim rounded text-xs text-slate-400 hover:text-white hover:border-slate-500 transition-colors"
                                         >
-                                            <span className="material-symbols-outlined text-[16px]">
-                                                {SORT_OPTIONS.find(o => o.value === sortBy)?.icon || 'sort'}
-                                            </span>
+                                            <Icon name={SORT_OPTIONS.find(o => o.value === sortBy)?.icon || 'sort'} className="text-[16px]" />
                                             {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
-                                            <span className="material-symbols-outlined text-[14px]">expand_more</span>
+                                            <Icon name="expand_more" className="text-[14px]" />
                                         </button>
                                         {showSortDropdown && (
                                             <div className="absolute right-0 top-full mt-1 w-44 bg-surface border border-border-dim rounded-lg shadow-xl z-50 py-1 animate-fade-in">
@@ -458,10 +478,10 @@ const App: React.FC = () => {
                                                         className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors
                                                             ${sortBy === option.value ? 'bg-primary/10 text-primary' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}
                                                     >
-                                                        <span className="material-symbols-outlined text-[16px]">{option.icon}</span>
+                                                        <Icon name={option.icon} className="text-[16px]" />
                                                         {option.label}
                                                         {sortBy === option.value && (
-                                                            <span className="material-symbols-outlined text-[14px] ml-auto">check</span>
+                                                            <Icon name="check" className="text-[14px] ml-auto" />
                                                         )}
                                                     </button>
                                                 ))}
@@ -479,7 +499,7 @@ const App: React.FC = () => {
                                                     : 'hover:bg-white/5 text-slate-400 hover:text-white'
                                                 }`}
                                         >
-                                            <span className="material-symbols-outlined text-[16px] mr-1.5">list</span>
+                                            <Icon name="list" className="text-[16px] mr-1.5" />
                                             List
                                         </button>
                                         <button
@@ -490,7 +510,7 @@ const App: React.FC = () => {
                                                     : 'hover:bg-white/5 text-slate-400 hover:text-white'
                                                 }`}
                                         >
-                                            <span className="material-symbols-outlined text-[16px] mr-1.5">grid_view</span>
+                                            <Icon name="grid_view" className="text-[16px] mr-1.5" />
                                             Grid
                                         </button>
                                     </div>
@@ -504,12 +524,12 @@ const App: React.FC = () => {
                                     >
                                         {importing ? (
                                             <>
-                                                <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+                                                <Icon name="progress_activity" className="text-[18px] animate-spin" />
                                                 Scanning...
                                             </>
                                         ) : (
                                             <>
-                                                <span className="material-symbols-outlined text-[18px]">add</span>
+                                                <Icon name="add" className="text-[18px]" />
                                                 New Project
                                             </>
                                         )}
@@ -521,7 +541,7 @@ const App: React.FC = () => {
                             <div className="px-6 pb-4 space-y-3">
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span className="material-symbols-outlined text-slate-500 group-focus-within:text-primary transition-colors">search</span>
+                                        <Icon name="search" className="text-slate-500 group-focus-within:text-primary transition-colors" />
                                     </div>
                                     <input
                                         ref={searchInputRef}
@@ -536,7 +556,7 @@ const App: React.FC = () => {
                                             onClick={() => setSearchQuery('')}
                                             className="absolute inset-y-0 right-16 pr-3 flex items-center text-slate-500 hover:text-white"
                                         >
-                                            <span className="material-symbols-outlined text-[18px]">close</span>
+                                            <Icon name="close" className="text-[18px]" />
                                         </button>
                                     )}
                                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -575,15 +595,15 @@ const App: React.FC = () => {
 
                             {/* Table Header (List View Only) */}
                             {viewMode === 'list' && filteredProjects.length > 0 && (
-                                <div className="grid grid-cols-12 gap-4 mx-6 px-6 py-2 border-t border-l border-r border-border-dim bg-surface/50 text-xs font-medium text-slate-500 uppercase tracking-wider">
-                                    <div className="col-span-4 flex items-center gap-1">
+                                <div className="grid grid-cols-12 gap-2 lg:gap-4 mx-6 px-6 py-2 border-t border-l border-r border-border-dim bg-surface/50 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                    <div className="col-span-6 lg:col-span-4 flex items-center gap-1">
                                         Project
                                     </div>
-                                    <div className="col-span-2 flex items-center">Tech Stack</div>
-                                    <div className="col-span-2 flex items-center">Git Status</div>
-                                    <div className="col-span-1 flex items-center">Storage</div>
-                                    <div className="col-span-1 flex items-center text-center justify-center">Active</div>
-                                    <div className="col-span-2 text-right">Actions</div>
+                                    <div className="hidden lg:flex col-span-2 items-center">Tech Stack</div>
+                                    <div className="col-span-3 lg:col-span-2 flex items-center">Git Status</div>
+                                    <div className="hidden xl:flex col-span-1 items-center">Storage</div>
+                                    <div className="hidden xl:flex col-span-1 items-center text-center justify-center">Active</div>
+                                    <div className="col-span-3 lg:col-span-2 text-right">Actions</div>
                                 </div>
                             )}
                         </header>
@@ -592,9 +612,11 @@ const App: React.FC = () => {
                         <BulkActionsBar
                             selectedCount={selectedIds.size}
                             totalCount={filteredProjects.length}
+                            selectedProjects={projects.filter(p => selectedIds.has(p.id))}
                             onSelectAll={() => selectAll()}
                             onClearSelection={clearSelection}
                             onBulkDeleteNodeModules={handleBulkDeleteNodeModules}
+                            onBulkCleanBuildFolders={handleBulkCleanBuildFolders}
                             isDeleting={bulkDeleting}
                         />
 
@@ -703,7 +725,7 @@ const App: React.FC = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-dark/80 backdrop-blur-sm">
                     <div className="bg-surface border border-border-dim rounded-lg p-8 flex flex-col items-center gap-4 shadow-2xl">
                         <div className="size-12 rounded-full bg-primary/20 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-[28px] text-primary animate-spin">progress_activity</span>
+                            <Icon name="progress_activity" className="text-[28px] text-primary animate-spin" />
                         </div>
                         <div className="text-center">
                             <h3 className="text-lg font-semibold text-white mb-1">Scanning Project</h3>

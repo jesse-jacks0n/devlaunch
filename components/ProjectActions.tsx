@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Project, ActionState } from '../types';
+import Icon from './Icon';
 
 interface ProjectActionsProps {
     project: Project;
@@ -69,9 +70,9 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                     }`}
             >
                 {isLoading ? (
-                    <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+                    <Icon name="progress_activity" className="text-[18px] animate-spin" />
                 ) : (
-                    <span className="material-symbols-outlined text-[18px]">more_vert</span>
+                    <Icon name="more_vert" className="text-[18px]" />
                 )}
             </button>
 
@@ -84,9 +85,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                 onClick={() => { onTogglePin(); setIsOpen(false); }}
                                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                             >
-                                <span className={`material-symbols-outlined text-[18px] ${project.isPinned ? 'text-amber-400' : 'text-slate-400'}`}>
-                                    {project.isPinned ? 'star' : 'star_outline'}
-                                </span>
+                                <Icon name={project.isPinned ? 'pin_off' : 'pin'} className={`text-[18px] ${project.isPinned ? 'text-amber-400' : 'text-slate-400'}`} />
                                 {project.isPinned ? 'Unpin Project' : 'Pin Project'}
                             </button>
                         </div>
@@ -100,14 +99,14 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                             onClick={() => { onOpenIde('code'); setIsOpen(false); }}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[18px] text-primary">open_in_new</span>
+                            <Icon name="open_in_new" className="text-[18px] text-primary" />
                             Open in VS Code
                         </button>
                         <button
                             onClick={() => { onOpenIde('cursor'); setIsOpen(false); }}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[18px] text-primary">edit</span>
+                            <Icon name="edit" className="text-[18px] text-primary" />
                             Open in Cursor
                         </button>
                         {onOpenTerminal && (
@@ -115,7 +114,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                 onClick={() => { onOpenTerminal(); setIsOpen(false); }}
                                 className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                             >
-                                <span className="material-symbols-outlined text-[18px] text-primary">terminal</span>
+                                <Icon name="terminal" className="text-[18px] text-primary" />
                                 Open Terminal
                             </button>
                         )}
@@ -132,7 +131,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onRunScripts(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-primary">play_arrow</span>
+                                        <Icon name="play_arrow" className="text-[18px] text-primary" />
                                         Run Scripts
                                         {project.scripts && project.scripts.length > 0 && (
                                             <span className="ml-auto text-[10px] font-mono bg-primary/20 text-primary px-1.5 rounded">{project.scripts.length}</span>
@@ -143,7 +142,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                     onClick={() => { onInstallDeps(); setIsOpen(false); }}
                                     className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                 >
-                                    <span className="material-symbols-outlined text-[18px] text-emerald-400">download</span>
+                                    <Icon name="download" className="text-[18px] text-emerald-400" />
                                     Install Dependencies
                                     <span className="ml-auto text-[10px] font-mono text-slate-500">{project.packageManager}</span>
                                 </button>
@@ -152,7 +151,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onDeleteNodeModules(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-orange-400">delete_sweep</span>
+                                        <Icon name="delete_sweep" className="text-[18px] text-orange-400" />
                                         Delete node_modules
                                         <span className="ml-auto text-[10px] font-mono text-slate-500">{project.storage}</span>
                                     </button>
@@ -162,7 +161,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onCheckHealth(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-primary">health_and_safety</span>
+                                        <Icon name="health_and_safety" className="text-[18px] text-primary" />
                                         Check Health
                                         {project.healthStatus && (
                                             <span className={`ml-auto text-[10px] font-mono px-1.5 rounded ${(project.healthStatus.vulnerabilities?.high || 0) > 0
@@ -194,7 +193,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                     onClick={() => { onCleanBuildFolder(); setIsOpen(false); }}
                                     className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                 >
-                                    <span className="material-symbols-outlined text-[18px] text-orange-400">cleaning_services</span>
+                                    <Icon name="cleaning_services" className="text-[18px] text-orange-400" />
                                     Clean Build Folder
                                     {project.buildStorage && (
                                         <span className="ml-auto text-[10px] font-mono text-slate-500">{project.buildStorage}</span>
@@ -214,7 +213,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onGitPull(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-primary">download</span>
+                                        <Icon name="download" className="text-[18px] text-primary" />
                                         Git Pull
                                     </button>
                                 )}
@@ -223,7 +222,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onGitFetch(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-primary">cloud_download</span>
+                                        <Icon name="cloud_download" className="text-[18px] text-primary" />
                                         Git Fetch
                                     </button>
                                 )}
@@ -241,10 +240,10 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onEditNotes(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-primary">note</span>
+                                        <Icon name="note" className="text-[18px] text-primary" />
                                         {project.notes ? 'Edit Notes' : 'Add Notes'}
                                         {project.notes && (
-                                            <span className="material-symbols-outlined text-[14px] ml-auto text-primary">check</span>
+                                            <Icon name="check" className="text-[14px] ml-auto text-primary" />
                                         )}
                                     </button>
                                 )}
@@ -253,7 +252,7 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                                         onClick={() => { onManageTags(); setIsOpen(false); }}
                                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                                     >
-                                        <span className="material-symbols-outlined text-[18px] text-primary">label</span>
+                                        <Icon name="label" className="text-[18px] text-primary" />
                                         Manage Tags
                                         {project.tags && project.tags.length > 0 && (
                                             <span className="ml-auto text-[10px] font-mono bg-primary/20 text-primary px-1.5 rounded">{project.tags.length}</span>
@@ -271,14 +270,14 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                             onClick={() => { onRevealInExplorer(); setIsOpen(false); }}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[18px] text-slate-400">folder_open</span>
+                            <Icon name="folder_open" className="text-[18px] text-slate-400" />
                             Reveal in Explorer
                         </button>
                         <button
                             onClick={() => { onRefresh(); setIsOpen(false); }}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[18px] text-slate-400">refresh</span>
+                            <Icon name="refresh" className="text-[18px] text-slate-400" />
                             Refresh Project Info
                         </button>
                     </div>
@@ -291,16 +290,14 @@ const ProjectActions: React.FC<ProjectActionsProps> = ({
                             onClick={() => { onArchive(); setIsOpen(false); }}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[18px] text-slate-400">
-                                {project.isArchived ? 'unarchive' : 'archive'}
-                            </span>
+                            <Icon name={project.isArchived ? 'unarchive' : 'archive'} className="text-[18px] text-slate-400" />
                             {project.isArchived ? 'Unarchive Project' : 'Archive Project'}
                         </button>
                         <button
                             onClick={() => { onRemove(); setIsOpen(false); }}
                             className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded transition-colors"
                         >
-                            <span className="material-symbols-outlined text-[18px]">remove_circle</span>
+                            <Icon name="remove_circle" className="text-[18px]" />
                             Remove from Library
                         </button>
                     </div>

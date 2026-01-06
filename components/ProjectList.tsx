@@ -1,6 +1,7 @@
 import React from 'react';
 import { Project, TechStack, ActionState } from '../types';
 import ProjectActions from './ProjectActions';
+import Icon from './Icon';
 
 interface ProjectListProps {
     projects: Project[];
@@ -103,66 +104,53 @@ const ProjectRow: React.FC<ProjectRowProps> = ({
     const isLoading = !!actionState;
 
     return (
-        <div className={`group relative grid grid-cols-12 gap-4 px-6 py-3 border-b border-l border-r border-border-dim transition-colors items-center project-row
+        <div className={`group relative grid grid-cols-12 gap-2 lg:gap-4 px-6 py-3 border-b border-l border-r border-border-dim transition-colors items-center project-row
             ${isArchived ? 'bg-surface hover:bg-surface-highlight opacity-60' : 'bg-surface hover:bg-surface-highlight'}
             ${isSelected ? 'bg-primary/5 border-l-2 border-l-primary' : ''}
             ${isLoading ? 'pointer-events-none' : ''}`}
         >
-            {/* Selection Checkbox */}
-            {onToggleSelect && (
-                <div className="absolute left-1 top-1/2 -translate-y-1/2">
+            {/* Project Name & Path */}
+            <div className="col-span-6 lg:col-span-4 flex items-center gap-2 min-w-0">
+                {/* Selection Checkbox - inline with content */}
+                {onToggleSelect && (
                     <button
                         onClick={onToggleSelect}
-                        className={`size-5 rounded border flex items-center justify-center transition-all
+                        className={`size-5 rounded border flex items-center justify-center transition-all shrink-0
                             ${isSelected
                                 ? 'bg-primary border-primary text-white'
                                 : 'border-border-dim hover:border-slate-500 text-transparent hover:text-slate-500'
                             }`}
                     >
-                        <span className="material-symbols-outlined text-[14px]">check</span>
+                        <Icon name="check" className="text-[14px]" />
                     </button>
-                </div>
-            )}
-
-            {/* Project Name & Path */}
-            <div className={`col-span-4 flex items-start gap-3 ${onToggleSelect ? 'pl-5' : ''}`}>
-                <div className={`size-9 rounded flex items-center justify-center shrink-0 border transition-all
+                )}
+                <div className={`size-8 lg:size-9 rounded flex items-center justify-center shrink-0 border transition-all
                     bg-surface border-border-dim text-slate-500 group-hover:text-primary group-hover:border-primary/30`}
                 >
                     {isLoading ? (
-                        <span className="material-symbols-outlined text-[20px] animate-spin text-primary">progress_activity</span>
+                        <Icon name="progress_activity" className="text-[18px] lg:text-[20px] animate-spin text-primary" />
                     ) : (
-                        <span className="material-symbols-outlined text-[20px]">{project.icon}</span>
+                        <Icon name={project.icon} className="text-[18px] lg:text-[20px]" />
                     )}
                 </div>
-                <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
                         {project.isPinned && (
-                            <span className="material-symbols-outlined text-[14px] text-amber-400" title="Pinned">star</span>
+                            <Icon name="pin" className="text-[12px] text-amber-400 shrink-0" title="Pinned" />
                         )}
                         <h3 className="text-sm font-semibold leading-tight truncate text-slate-200 group-hover:text-white">
                             {project.name}
                         </h3>
                         {project.notes && (
-                            <span className="material-symbols-outlined text-[12px] text-primary" title="Has notes">note</span>
+                            <Icon name="note" className="text-[10px] text-primary shrink-0" title="Has notes" />
                         )}
                     </div>
-                    <p className="text-xs text-slate-500 font-mono truncate mt-0.5" title={project.path}>{project.path}</p>
-                    {project.tags && project.tags.length > 0 && (
-                        <div className="flex gap-1 mt-1">
-                            {project.tags.slice(0, 2).map((tag, i) => (
-                                <TagBadge key={i} tag={tag} />
-                            ))}
-                            {project.tags.length > 2 && (
-                                <span className="text-[9px] text-slate-500">+{project.tags.length - 2}</span>
-                            )}
-                        </div>
-                    )}
+                    <p className="text-[10px] lg:text-xs text-slate-500 font-mono truncate" title={project.path}>{project.path}</p>
                 </div>
             </div>
 
-            {/* Tech Stack */}
-            <div className="col-span-2 flex flex-wrap gap-1.5 items-center">
+            {/* Tech Stack - Hidden on smaller screens */}
+            <div className="hidden lg:flex col-span-2 flex-wrap gap-1 items-center overflow-hidden">
                 {project.techStack.slice(0, 2).map((tech, i) => (
                     <TechStackBadge key={i} tech={tech} />
                 ))}
@@ -172,54 +160,38 @@ const ProjectRow: React.FC<ProjectRowProps> = ({
             </div>
 
             {/* Git Status */}
-            <div className="col-span-2 flex flex-col justify-center">
-                <div className="flex items-center gap-2">
-                    <span className={`material-symbols-outlined text-[14px] 
-                        ${project.gitStatus.type === 'success' ? 'text-emerald-400' : ''}
-                        ${project.gitStatus.type === 'warning' ? 'text-yellow-400' : ''}
-                        ${project.gitStatus.type === 'neutral' ? 'text-slate-600' : ''}
-                        ${project.gitStatus.type === 'info' ? 'text-blue-400' : ''}
-                    `}>
-                        call_split
-                    </span>
-                    <span className="text-xs font-mono text-slate-300 truncate max-w-[100px]" title={project.gitStatus.branch}>
-                        {project.gitStatus.branch}
-                    </span>
-                </div>
-                <div className="flex items-center gap-1.5 mt-1">
-                    {project.gitStatus.type === 'warning' && <span className="size-1.5 rounded-full bg-yellow-500"></span>}
-                    {project.gitStatus.type === 'success' && <span className="size-1.5 rounded-full bg-emerald-500"></span>}
-                    {project.gitStatus.type === 'neutral' && <span className="size-1.5 rounded-full bg-slate-600"></span>}
-                    {project.gitStatus.type === 'info' && <span className="material-symbols-outlined text-[10px] text-blue-400">arrow_upward</span>}
-
-                    <span className="text-[10px] font-mono text-slate-500">
-                        {project.gitStatus.count ? `${project.gitStatus.count} ${project.gitStatus.status.toLowerCase()}` : project.gitStatus.status}
-                    </span>
-                </div>
-            </div>
-
-            {/* Storage */}
-            <div className="col-span-1 flex items-center gap-1.5 text-xs text-slate-400">
-                <span className={`material-symbols-outlined text-[14px] ${project.hasNodeModules ? 'text-orange-400' : 'text-slate-600'}`}>
-                    {project.hasNodeModules ? 'folder' : 'hard_drive'}
+            <div className="col-span-3 lg:col-span-2 flex items-center gap-2 min-w-0">
+                <Icon name="call_split" className={`text-[14px] shrink-0
+                    ${project.gitStatus.type === 'success' ? 'text-emerald-400' : ''}
+                    ${project.gitStatus.type === 'warning' ? 'text-yellow-400' : ''}
+                    ${project.gitStatus.type === 'neutral' ? 'text-slate-600' : ''}
+                    ${project.gitStatus.type === 'info' ? 'text-blue-400' : ''}
+                `} />
+                <span className="text-xs font-mono text-slate-300 truncate" title={project.gitStatus.branch}>
+                    {project.gitStatus.branch}
                 </span>
-                <span className="font-mono text-[11px]">{project.storage}</span>
             </div>
 
-            {/* Last Active */}
-            <div className={`col-span-1 text-xs text-center ${isArchived ? 'text-slate-600' : 'text-slate-400'}`}>
+            {/* Storage - Hidden on smaller screens */}
+            <div className="hidden xl:flex col-span-1 items-center gap-1.5 text-xs text-slate-400">
+                <Icon name={project.hasNodeModules ? 'folder' : 'hard_drive'} className={`text-[14px] shrink-0 ${project.hasNodeModules ? 'text-orange-400' : 'text-slate-600'}`} />
+                <span className="font-mono text-[11px] truncate">{project.storage}</span>
+            </div>
+
+            {/* Last Active - Hidden on smaller screens */}
+            <div className={`hidden xl:flex col-span-1 text-xs justify-center ${isArchived ? 'text-slate-600' : 'text-slate-400'}`}>
                 {project.lastActive.replace(' ago', '')}
             </div>
 
             {/* Actions */}
-            <div className="col-span-2 flex justify-end items-center gap-2">
+            <div className="col-span-3 lg:col-span-2 flex justify-end items-center gap-1 lg:gap-2">
                 <button
                     onClick={() => onOpenIde('code')}
                     disabled={isLoading}
-                    className="launch-btn opacity-0 group-hover:opacity-100 bg-primary/20 hover:bg-primary text-primary text-xs font-medium px-3 py-1.5 rounded transition-all flex items-center gap-1 disabled:opacity-50"
+                    className="launch-btn opacity-0 group-hover:opacity-100 bg-primary/20 hover:bg-primary text-primary text-xs font-medium px-2 lg:px-3 py-1.5 rounded transition-all flex items-center gap-1 disabled:opacity-50"
                 >
-                    <span className="material-symbols-outlined text-[14px]">open_in_new</span>
-                    Launch
+                    <Icon name="open_in_new" className="text-[14px]" />
+                    <span className="hidden sm:inline">Launch</span>
                 </button>
                 <ProjectActions
                     project={project}
@@ -300,44 +272,40 @@ const ProjectGridCard: React.FC<ProjectGridCardProps> = ({
              ${isSelected ? 'ring-2 ring-primary border-primary' : ''}
              ${isLoading ? 'pointer-events-none' : ''}`}>
 
-            {/* Selection Checkbox */}
+            {/* Selection Checkbox - absolute top left */}
             {onToggleSelect && (
                 <button
-                    onClick={onToggleSelect}
+                    onClick={(e) => { e.stopPropagation(); onToggleSelect(); }}
                     className={`absolute top-3 left-3 size-5 rounded border flex items-center justify-center transition-all z-10
                         ${isSelected
                             ? 'bg-primary border-primary text-white'
                             : 'border-border-dim opacity-0 group-hover:opacity-100 hover:border-slate-500 text-transparent hover:text-slate-500'
                         }`}
                 >
-                    <span className="material-symbols-outlined text-[14px]">check</span>
+                    <Icon name="check" className="text-[14px]" />
                 </button>
             )}
 
-            {/* Pinned Indicator */}
-            {project.isPinned && (
-                <div className="absolute top-3 left-3 text-amber-400">
-                    <span className="material-symbols-outlined text-[16px]">star</span>
-                </div>
-            )}
-
             {/* Top Row: Icon, Name, Actions */}
-            <div className="flex items-start justify-between">
-                <div className={`flex items-start gap-3 flex-1 min-w-0 ${onToggleSelect || project.isPinned ? 'pl-6' : ''}`}>
+            <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
                     <div className="size-10 rounded-md flex items-center justify-center shrink-0 border transition-all bg-surface border-border-dim text-slate-400 group-hover:border-primary/30">
                         {isLoading ? (
-                            <span className="material-symbols-outlined text-[24px] animate-spin text-primary">progress_activity</span>
+                            <Icon name="progress_activity" className="text-[24px] animate-spin text-primary" />
                         ) : (
-                            <span className="material-symbols-outlined text-[24px]">{project.icon}</span>
+                            <Icon name={project.icon} className="text-[24px]" />
                         )}
                     </div>
                     <div className="flex flex-col min-w-0 flex-1">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                             <h3 className="text-base font-bold text-slate-200 group-hover:text-white transition-colors leading-tight truncate">
                                 {project.name}
                             </h3>
+                            {project.isPinned && (
+                                <Icon name="pin" className="text-[12px] text-amber-400 shrink-0" title="Pinned" />
+                            )}
                             {project.notes && (
-                                <span className="material-symbols-outlined text-[12px] text-primary" title="Has notes">note</span>
+                                <Icon name="note" className="text-[12px] text-primary shrink-0" title="Has notes" />
                             )}
                         </div>
                         <p className="text-xs text-slate-500 font-mono mt-1 truncate" title={project.path}>
@@ -388,7 +356,7 @@ const ProjectGridCard: React.FC<ProjectGridCardProps> = ({
                     ${project.gitStatus.type === 'neutral' ? 'bg-slate-500/10 border-slate-500/20 text-slate-400' : ''}
                     ${project.gitStatus.type === 'info' ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : ''}
                 `}>
-                    <span className="material-symbols-outlined text-[12px]">call_split</span>
+                    <Icon name="call_split" className="text-[12px]" />
                     <span className="truncate max-w-[80px]">{project.gitStatus.branch}</span>
                 </div>
                 {project.gitStatus.count && (
@@ -406,7 +374,7 @@ const ProjectGridCard: React.FC<ProjectGridCardProps> = ({
                                 : 'bg-emerald-500/10 text-emerald-400'
                         }`}
                     >
-                        <span className="material-symbols-outlined text-[10px]">health_and_safety</span>
+                        <Icon name="health_and_safety" className="text-[10px]" />
                         {(project.healthStatus.vulnerabilities?.high || 0) > 0
                             ? `${project.healthStatus.vulnerabilities?.high} vuln`
                             : project.healthStatus.outdatedCount > 0
@@ -431,13 +399,11 @@ const ProjectGridCard: React.FC<ProjectGridCardProps> = ({
             <div className="mt-auto pt-4 border-t border-border-dim flex items-center justify-between text-xs text-slate-500">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-1.5" title="Storage usage">
-                        <span className={`material-symbols-outlined text-[14px] ${project.hasNodeModules ? 'text-orange-400' : ''}`}>
-                            {project.hasNodeModules ? 'folder' : 'hard_drive'}
-                        </span>
+                        <Icon name={project.hasNodeModules ? 'folder' : 'hard_drive'} className={`text-[14px] ${project.hasNodeModules ? 'text-orange-400' : ''}`} />
                         <span className="font-mono text-[11px]">{project.storage}</span>
                     </div>
                     <div className="flex items-center gap-1.5" title="Last active">
-                        <span className="material-symbols-outlined text-[14px]">history</span>
+                        <Icon name="history" className="text-[14px]" />
                         <span>{project.lastActive}</span>
                     </div>
                 </div>
@@ -448,7 +414,7 @@ const ProjectGridCard: React.FC<ProjectGridCardProps> = ({
                     disabled={isLoading}
                     className="launch-btn opacity-0 group-hover:opacity-100 transition-all bg-primary/20 hover:bg-primary text-primary rounded px-2 py-1 flex items-center gap-1 text-xs font-medium disabled:opacity-50"
                 >
-                    <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+                    <Icon name="open_in_new" className="text-[14px]" />
                     Launch
                 </button>
             </div>

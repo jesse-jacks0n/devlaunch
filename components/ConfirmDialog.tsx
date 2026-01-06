@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from './Icon';
 
 interface ConfirmDialogProps {
     isOpen: boolean;
@@ -58,9 +59,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 <div className="p-6">
                     <div className="flex items-start gap-4">
                         <div className={`size-10 rounded-full ${styles.iconBg} flex items-center justify-center shrink-0`}>
-                            <span className={`material-symbols-outlined ${styles.iconColor}`}>
-                                {variant === 'danger' ? 'delete_forever' : variant === 'warning' ? 'warning' : 'info'}
-                            </span>
+                            <Icon name={variant === 'danger' ? 'delete_forever' : variant === 'warning' ? 'warning' : 'info'} className={styles.iconColor} />
                         </div>
                         <div className="flex-1 min-w-0">
                             <h3 className="text-lg font-semibold text-white">{title}</h3>
